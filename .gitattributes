@@ -1,0 +1,7 @@
+# 这个仓库里的文本要给正则按行解析，行尾必须是 LF。
+# Windows 上默认的 autocrlf 会把 \r 带进每一行，标题正则和承启句锚点都会失配。
+* text=auto eol=lf
+*.py   text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.json text eol=lf
