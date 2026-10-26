@@ -31,21 +31,27 @@ python scripts/check_params.py 你的稿子.md --genre 批复   # 法定公文�
 
 后来越攒越多，成了现在这个样子。定位一直没变：**不替你写，只让你写完心里有数。**
 
-## 四条命令
+## 五条命令
 
 ```bash
-# 写完一篇事务性材料，验一下像不像公文
+# ① 开工前：不确定该写成什么文种，让它反过来问你
+python scripts/gate.py 草稿.md
+
+# ② 交付前：逐项验收，判能不能交
+python scripts/gate.py 草稿.md --genre 调研报告
+python scripts/gate.py 草稿.md --genre 批复 --draft   # 草稿态：允许留占位符
+
+# ③ 偏在哪：参数级自检
 python scripts/check_params.py 草稿.md --genre 调研报告
 
-# 写的是法定公文（通知/批复/请示/报告/函/纪要/决定/通报/意见）：查体例，不查参数
+# ④ 写的是法定公文（通知/批复/请示/报告/函/纪要/决定/通报/意见）：查体例，不查参数
 python scripts/check_params.py 草稿.md --genre 批复
 
-# 不确定该写成什么文种，让它猜
-python scripts/check_params.py 草稿.md --match
-
-# 把你自己的稿子变成参数（首次用之前先读第八节）
+# ⑤ 把你自己的稿子变成参数（首次用之前先读第八节）
 python scripts/ingest_corpus.py --genre 工作总结
 ```
+
+`gate.py` 是门控，`check_params.py` 是显微镜——前者判能不能交，后者告诉你偏在哪。门控退出码：0 可交、1 有硬伤、2 类型没定、3 还没定稿。
 
 法定公文走的是另一条路：它的结构由《党政机关公文处理工作条例》和 GB/T 9704 锁死，篇幅从 623 字（批复）到两万多字（省政府工作报告）都合法，拿统计参数去卡它必然一堆假警报。所以那一路只查四组——承启句、层级分条、篇名要素、用语红线。
 
@@ -65,7 +71,7 @@ python scripts/ingest_corpus.py --genre 工作总结
 | `参考/法定公文样例/` | 7 篇政府公开真件，用来看版式和承启句 |
 | `参考/真件样例/` | 10 篇真件，六类文种（决定/意见/通知/批复/通报/工作报告），附实测报告与写法提要 |
 | `我的语料/` | 你自己的稿子和算出来的参数。**这块才是你的** |
-| `scripts/` | 四个脚本：`check_params`（自检）、`ingest_corpus`（个人语料入库）、`distill_corpus`（真件提炼）、`strip_meta`（一次性维护脚本，剥 `_meta` 里的原文，平时不用跑） |
+| `scripts/` | `gate`（门控：核对类型 / 交付验收）、`check_params`（参数自检）、`ingest_corpus`（个人语料入库）、`distill_corpus`（真件提炼）、`strip_meta`（一次性维护脚本，平时不用跑） |
 
 ## 三件必须先知道的事
 

@@ -291,7 +291,9 @@ def law_report(a, raw, genre):
     print('【① 承启句】文种指纹，用错等于文种错')
     print('-'*76)
     pat, expect = LAW_OPEN.get(genre, (None, ''))
-    body = '\n'.join(lines[:20]) + '\n' + '\n'.join(lines[-6:])
+    # 上行文的请求语在结尾（请示还要落在附件、落款之后），下行文的承启句在开头
+    window = lines[-15:] if genre in ('请示', '报告') else lines[:20]
+    body = '\n'.join(window)
     if pat is None:
         print(f'ⓘ {genre}不起承启句。标准形态：{expect}')
     elif re.search(pat, body):
